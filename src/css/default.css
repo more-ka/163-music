@@ -51,10 +51,14 @@ aside>.newSong {
   border-bottom: 1px solid #777;
   cursor: pointer;
 }
+aside>.newSong.active {
+  background: #ddd;
+}
 
-aside>.songList {
+aside > .songList-container{
   flex-grow: 1;
 }
+
 
 .songList .line {
   border-bottom: 1px solid #ddd;
