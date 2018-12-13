@@ -59,9 +59,8 @@
       song.set('id', data.id);
       return song.save().then( (newSong) => {
         let {id,attributes} = newSong
-        this.data = {id,...attributes}
-        //Object.assign(this.data,{id,...attributes})
-        //assign 把右边对象赋给左边对象 错误写法,不可以直接传内存地址
+        Object.assign(this.data,{id,...attributes})
+        //assign 把右边对象赋给左边对象 不可以直接传内存地址
         //...attributes 复制attr所有属性
       },  (error) => {
         console.error(error);
@@ -75,7 +74,8 @@
       this.bindEvents()
       this.view.render(this.model.data)
       window.eventHub.on('upload', (data) => {
-        this.view.render(data)
+        this.model.data = data
+        this.view.render(this.model.data)
       })
     },
     bindEvents() {
@@ -90,7 +90,11 @@
         .then(()=>{
           console.log(this.model.data)
           this.view.reset()
-          window.eventHub.emit('create',this.model.data)
+
+          let string = JSON.stringify(this.model.data)
+          let object = JSON.parse(string)
+          // 深拷贝,防止更改data时影响模块的数据
+          window.eventHub.emit('create',object)
         })
       })
     }
